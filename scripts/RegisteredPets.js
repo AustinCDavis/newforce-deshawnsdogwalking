@@ -1,4 +1,6 @@
-import { getPets } from "./database.js"
+import { getPets, getWalkers } from "./database.js"
+const pets = getPets()
+const walkers = getWalkers()
 
 document.addEventListener(
     "click",  // This is the type of event
@@ -30,27 +32,33 @@ document.addEventListener(
                 Destructuring in JavaScript:
                     https://www.youtube.com/watch?v=UgEaJBz3bjY
             */
-            const [,id] = itemClicked.id.split("--")
+            const [,petPrimaryKey] = itemClicked.id.split("--")
 
             /*
                 Now that you have the primary key of a walker object,
                 find the whole object by iterating the walkers array.
             */
-            for (const petPrimaryKey of pets) {
-
+            let matchingPet = null
+            for (const pet of pets) {
                 /*
                     Compare the primary key of each walker to the one
                     you have. As soon as you find the right one, display
                     the window alert message.
                 */
-                if (petPrimaryKey.id === parseInt(id)) {
-                    window.alert(`${petPrimaryKey.name} barks at you`)
+                if (parseInt(petPrimaryKey) === pet.id) {
+                    matchingPet = pet
                 }
             }
+            let matchingWalker;
+            for (const walker of walkers){
+                if (matchingPet.id === walker.id){
+                    matchingWalker = walker
+                }
+            }
+            window.alert(`${matchingPet.name} is being walked by ${matchingWalker.name}`)
         }
     }
 )
-const pets = getPets()
 
 export const RegisteredPets = () => {
     let petHTML = "<ul>"
